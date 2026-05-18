@@ -1,12 +1,8 @@
-/* ======================
-   GLOBAL
-====================== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f0f0f0;
   color: #000;
-  transition: background 0.3s, color 0.3s;
 }
 
 body.dark {
@@ -14,16 +10,10 @@ body.dark {
   color: #eee;
 }
 
-/* ======================
-   CANVAS
-====================== */
 canvas {
   display: block;
 }
 
-/* ======================
-   PANEL
-====================== */
 #ui-panel {
   position: fixed;
   bottom: 0;
@@ -32,27 +22,18 @@ canvas {
 
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   gap: 10px;
 
   background: #ffffff;
-  border-top: 2px solid #ccc;
-
-  transition: background 0.3s;
 }
 
 body.dark #ui-panel {
   background: #1e1e1e;
-  border-top: 2px solid #444;
 }
 
-/* ======================
-   BUTTONS
-====================== */
+/* buttons */
 button {
   padding: 8px 12px;
-  font-size: 14px;
-
   border-radius: 8px;
   border: none;
 
@@ -60,75 +41,32 @@ button {
   color: white;
 
   cursor: pointer;
-  min-width: 90px;
 }
 
-button:hover {
-  background: #43a047;
-}
-
-/* Dark buttons */
-body.dark button {
-  background: #2e7d32;
-}
-
-body.dark button:hover {
-  background: #1b5e20;
-}
-
-/* ======================
-   SLIDER
-====================== */
+/* slider container */
 .slider-container {
   display: flex;
-  align-items: center;
   gap: 10px;
-
-  flex-grow: 1;
-  min-width: 200px;
-}
-
-input[type="range"] {
+  align-items: center;
   flex-grow: 1;
 }
 
-/* ======================
-   INFO PANEL
-====================== */
 .info-box {
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
 
   background: #fafafa;
   padding: 10px;
-
   border-radius: 10px;
-  border: 1px solid #ccc;
 }
 
 body.dark .info-box {
   background: #2a2a2a;
-  border: 1px solid #555;
 }
 
-/* ======================
-   RESPONSIVE
-====================== */
+/* responsive */
 @media (max-width: 700px) {
-
   button {
     flex: 1 1 45%;
-  }
-
-  .slider-container {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-
-@media (max-width: 400px) {
-
-  button {
-    flex: 1 1 100%;
   }
 }
