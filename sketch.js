@@ -1,7 +1,7 @@
 let b1, b2;
 let r = 20;
 let collided = false;
-
+let dragging = false;
 let running = false;
 let showAnalysis = true;
 
@@ -122,7 +122,7 @@ function draw() {
     background(30);  // ✅ dark canvas
   }
 
-  if (running) {
+  if (running && !dragging) {
 
     if (guidedMode) {
 
@@ -173,6 +173,20 @@ function draw() {
 
   drawArrow(b1.pos, p5.Vector.mult(b1.vel,25), color(0,0,255));
   drawArrow(b2.pos, p5.Vector.mult(b2.vel,25), color(255,0,0));
+  // ======================
+// HOVER EFFECT
+// ======================
+if (!guidedMode && !collided) {
+  let d = dist(mouseX, mouseY, b2.pos.x, b2.pos.y);
+
+  if (d < r * 1.5) {
+    stroke(255, 0, 0);
+    strokeWeight(2);
+    noFill();
+
+    circle(b2.pos.x, b2.pos.y, r * 2.4);
+  }
+}
 
   if (showAnalysis && !collided) {
     drawDecomposition();
@@ -244,3 +258,26 @@ function drawAngle(){
 
   text("θ = "+nf(a,1,1)+"°",10,20);
 }
+function mousePressed() {
+
+  // μόνο αν δεν είμαστε σε guided και δεν έχει γίνει κρούση
+  if (guidedMode || collided) return;
+
+  let d = dist(mouseX, mouseY, b2.pos.x, b2.pos.y);
+
+  // πιο μεγάλο hitbox για touchscreen
+  if (d < r * 1.8) {
+    dragging = true;
+  }
+}
+
+function mouseDragged() {
+  if (dragging) {
+    b2.pos.set(mouseX, mouseY);
+  }
+}
+
+function mouseReleased() {
+  dragging = false;
+}
+
