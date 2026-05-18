@@ -3,14 +3,15 @@ let r = 20;
 
 let collided = false;
 let running = false;
-let showAnalysis = true;
 let dragging = false;
+let showAnalysis = true;
 
 let speedFactor = 1;
 let infoPanel;
 
 // ======================
 function setup() {
+
   let canvas = createCanvas(window.innerWidth, window.innerHeight - 140);
   canvas.parent(document.body);
 
@@ -28,7 +29,7 @@ function createUI() {
   let panel = select("#ui-panel");
 
   let resetBtn = createButton("Reset").parent(panel);
-  let playBtn = createButton("Start/Stop").parent(panel);
+  let playBtn = createButton("Start / Stop").parent(panel);
   let analysisBtn = createButton("Ανάλυση").parent(panel);
   let centralBtn = createButton("Κεντρική").parent(panel);
   let darkBtn = createButton("Dark").parent(panel);
@@ -50,7 +51,7 @@ function createUI() {
 
   infoPanel.addClass("info-box");
 
-  // actions
+  // ACTIONS
   resetBtn.mousePressed(resetSimulation);
 
   playBtn.mousePressed(() => {
@@ -70,7 +71,9 @@ function createUI() {
   });
 
   infoBtn.mousePressed(() => {
-    infoPanel.style("display", infoPanel.style("display")==="none" ? "block" : "none");
+    infoPanel.style("display",
+      infoPanel.style("display") === "none" ? "block" : "none"
+    );
   });
 
   slider.input(() => {
@@ -80,8 +83,16 @@ function createUI() {
 
 // ======================
 function resetSimulation() {
-  b1 = { pos: createVector(100, height/2), vel: createVector(3,0) };
-  b2 = { pos: createVector(width*0.6, height/2+40), vel: createVector(0,0) };
+
+  b1 = {
+    pos: createVector(100, height/2),
+    vel: createVector(3,0)
+  };
+
+  b2 = {
+    pos: createVector(width*0.6, height/2 + 40),
+    vel: createVector(0,0)
+  };
 
   collided = false;
   running = false;
@@ -118,12 +129,12 @@ function draw() {
   }
 
   drawAngle();
-
   drawHover();
 }
 
 // ======================
 function collide() {
+
   let n = p5.Vector.sub(b2.pos,b1.pos).normalize();
   let v = b1.vel.copy();
 
@@ -138,54 +149,63 @@ function collide() {
 
 // ======================
 function drawBall(b) {
+
   fill(document.body.classList.contains("dark") ? 180 : 200);
   circle(b.pos.x, b.pos.y, 2*r);
 }
 
 // ======================
 function drawArrow(base,vec,col) {
+
   push();
-  stroke(col); fill(col);
+  stroke(col);
+  fill(col);
+
   line(base.x,base.y,base.x+vec.x,base.y+vec.y);
+
   translate(base.x+vec.x,base.y+vec.y);
   rotate(vec.heading());
+
   triangle(0,0,-7,3,-7,-3);
+
   pop();
 }
 
 // ======================
 function drawDecomposition() {
+
   let n = p5.Vector.sub(b2.pos,b1.pos).normalize();
   let v = b1.vel.copy();
 
   let vp = p5.Vector.mult(n, v.dot(n));
   let vt = p5.Vector.sub(v, vp);
 
-  drawArrow(b1.pos,p5.Vector.mult(vp,25),color(0,150,0));
-  drawArrow(b1.pos,p5.Vector.mult(vt,25),color(255,140,0));
+  drawArrow(b1.pos, p5.Vector.mult(vp,25), color(0,150,0));
+  drawArrow(b1.pos, p5.Vector.mult(vt,25), color(255,140,0));
 }
 
 // ======================
 function drawAngle() {
 
-  let m1=b1.vel.mag();
-  let m2=b2.vel.mag();
+  let m1 = b1.vel.mag();
+  let m2 = b2.vel.mag();
 
   fill(document.body.classList.contains("dark") ? 255 : 0);
 
-  if (m1<0.01 || m2<0.01){
-    text("θ = 0°",10,20);
+  if (m1 < 0.01 || m2 < 0.01) {
+    text("θ = 0°", 10, 20);
     return;
   }
 
-  let c = constrain(b1.vel.dot(b2.vel)/(m1*m2),-1,1);
+  let c = constrain(b1.vel.dot(b2.vel)/(m1*m2), -1, 1);
   let a = degrees(acos(c));
 
-  text("θ = "+nf(a,1,1)+"°",10,20);
+  text("θ = " + nf(a,1,1) + "°", 10, 20);
 }
 
 // ======================
 function drawHover() {
+
   let d = dist(mouseX, mouseY, b2.pos.x, b2.pos.y);
 
   if (!collided && d < r*1.5) {
@@ -197,7 +217,9 @@ function drawHover() {
 
 // ======================
 function mousePressed() {
+
   let d = dist(mouseX, mouseY, b2.pos.x, b2.pos.y);
+
   if (!collided && d < r*1.8) dragging = true;
 }
 
