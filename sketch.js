@@ -7,11 +7,16 @@ let dragging = false;
 let showAnalysis = true;
 
 let speedFactor = 1;
+
+// trails
+let trail1 = [];
+let trail2 = [];
+let maxTrail = 100;
+
 let infoPanel;
 
 // ======================
 function setup() {
-
   let canvas = createCanvas(window.innerWidth, window.innerHeight - 140);
   canvas.parent(document.body);
 
@@ -29,7 +34,7 @@ function createUI() {
   let panel = select("#ui-panel");
 
   let resetBtn = createButton("Reset").parent(panel);
-  let playBtn = createButton("Start / Stop").parent(panel);
+  let playBtn = createButton("Start/Stop").parent(panel);
   let analysisBtn = createButton("Ανάλυση").parent(panel);
   let centralBtn = createButton("Κεντρική").parent(panel);
   let darkBtn = createButton("Dark").parent(panel);
@@ -51,7 +56,7 @@ function createUI() {
 
   infoPanel.addClass("info-box");
 
-  // ACTIONS
+  // actions
   resetBtn.mousePressed(resetSimulation);
 
   playBtn.mousePressed(() => {
@@ -72,7 +77,7 @@ function createUI() {
 
   infoBtn.mousePressed(() => {
     infoPanel.style("display",
-      infoPanel.style("display") === "none" ? "block" : "none"
+      infoPanel.style("display")==="none" ? "block" : "none"
     );
   });
 
@@ -96,6 +101,9 @@ function resetSimulation() {
 
   collided = false;
   running = false;
+
+  trail1 = [];
+  trail2 = [];
 }
 
 // ======================
@@ -117,6 +125,9 @@ function draw() {
       collide();
     }
   }
+
+  updateTrails();
+  drawTrails();
 
   drawBall(b1);
   drawBall(b2);
@@ -148,9 +159,34 @@ function collide() {
 }
 
 // ======================
-function drawBall(b) {
+function updateTrails() {
 
+  trail1.push(b1.pos.copy());
+  trail2.push(b2.pos.copy());
+
+  if (trail1.length > maxTrail) trail1.shift();
+  if (trail2.length > maxTrail) trail2.shift();
+}
+
+function drawTrails() {
+
+  noFill();
+
+  stroke(0,0,255,120);
+  beginShape();
+  trail1.forEach(p => vertex(p.x, p.y));
+  endShape();
+
+  stroke(255,0,0,120);
+  beginShape();
+  trail2.forEach(p => vertex(p.x, p.y));
+  endShape();
+}
+
+// ======================
+function drawBall(b) {
   fill(document.body.classList.contains("dark") ? 180 : 200);
+  noStroke();
   circle(b.pos.x, b.pos.y, 2*r);
 }
 
@@ -167,7 +203,6 @@ function drawArrow(base,vec,col) {
   rotate(vec.heading());
 
   triangle(0,0,-7,3,-7,-3);
-
   pop();
 }
 
@@ -230,3 +265,4 @@ function mouseDragged() {
 function mouseReleased() {
   dragging = false;
 }
+``
